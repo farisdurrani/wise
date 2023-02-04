@@ -3,7 +3,7 @@ Ask and we give you wise quotes from your own books.
 
 # Frontend
 ## Prerequisites
-- Node.js v18
+- [Node.js v18](https://nodejs.org/en/)
 
 ## How to start
 ```
@@ -15,7 +15,7 @@ Open the app at http://localhost:3000
 
 # Backend
 ## Prerequisites
-- Python 3.10
+- [Python 3.10+](https://www.python.org/downloads/)
 
 ## How to start
 ```
