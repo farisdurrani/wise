@@ -19,7 +19,8 @@ Open the app at http://localhost:3000
 
 ## How to start
 ```
+cd backend
 pip install -r requirements.txt
-python main.py
+python app.py
 ```
 Open the app at http://localhost:8000
