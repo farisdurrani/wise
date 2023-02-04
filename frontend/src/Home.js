@@ -1,10 +1,41 @@
 import React from "react";
-import { createBagOfWords } from "./utils/utils";
+import enterImage from "./img/enter_button.jpg";
+import pageTurn from "./img/page-turn.png"
 
 const Home = () => {
-  console.log(createBagOfWords('"From Diognetus, not to busy myself about trifling things, and not to give credit to what was said by miracle-workers and jugglers about incantations and the driving away of daemons and such things; and not to breed quails for fighting, nor to give myself up passionately to such things; and to endure freedom of speech; and to have become intimate with philosophy; and to have been a hearer, first of Bacchius, then of Tandasis and Marcianus; and to have written dialogues in my youth; and to have desired a plank bed and skin, and whatever else of the kind belongs to the Grecian discipline."'))
+  return (
+  <div>
+    {/* how do you change the <title> of the page?? */}
 
-  return <div>Hello World 123</div>;
+    {/* header */}
+    <div className="siteHeader">Get a Little Wiser</div>
+
+    {/* user selects their source of wisdom - either the Bible or Meditations */}
+    <div className="wisdomHeader">Choose your source of wisdom</div>
+    
+    {/* carousel */}
+    <div className="carousel">
+      
+    <img src={pageTurn} alt="" class="carouselItem"/>
+    <img src={pageTurn} alt="" class="carouselItem"/>
+    <img src={pageTurn} alt="" class="carouselItem"/>
+    <img src={pageTurn} alt="" class="carouselItem"/>
+    <img src={pageTurn} alt="" class="carouselItem"/>
+
+    </div>
+
+    {/* option to upload a plain-text file*/}      
+
+    {/* user tells their problem based on their source of wisdom */}
+    <div className="userProblem">
+      <input type="text" placeholder="Tell us your problem..."/>
+      <img src={enterImage}
+      alt="Image" className="enterButton"/>
+    </div>
+    
+    <img src={pageTurn} alt="" className="pageTurn"/>
+  </div>
+  );
 };
 
 export default Home;
