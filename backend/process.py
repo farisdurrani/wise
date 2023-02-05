@@ -3,13 +3,9 @@ import json
 from multiprocessing import Pool, cpu_count
 
 INPUT_COL_NAME = "Text"
+df = None
+input_bag_of_words = None
 
-with open("stopwords.json") as f:
-    stopWordsList = json.load(f)["stopwords"]
-
-stopWordsSet = set(stopWordsList)
-df = pd.read_csv("meditations.csv")
-input_bag_of_words = create_input_bag_of_words(df)
 
 def create_bag_of_words(text: str) -> dict:
     """
@@ -17,7 +13,13 @@ def create_bag_of_words(text: str) -> dict:
     :param text: The text to create the bag of words from
     :return: A dictionary with the words as keys and the number of occurrences as values
     """
-    words = [word.lower() for word in text.translate({ord(c): None for c in ".?!\"':;%*@[]("}).split(" ") if word not in stopWordsSet]
+    with open("/Users/fdurrani/LocalGithub/Foreign/wise/backend/data/stopwords.json") as f:
+        stopWordsList = json.load(f)["stopwords"]
+
+    stopWordsSet = set(stopWordsList)
+
+    words = [word.lower() for word in text.translate({ord(c): None for c in ".?!\"':;%*@[]("}).split(" ") if
+             word not in stopWordsSet]
     bag_of_words = {}
     for word in words:
         if word in bag_of_words:
@@ -25,6 +27,7 @@ def create_bag_of_words(text: str) -> dict:
         else:
             bag_of_words[word] = 1
     return bag_of_words
+
 
 def compare_bag_of_words(bag_of_words_1: dict, bag_of_words_2: dict) -> int:
     """
@@ -40,6 +43,7 @@ def compare_bag_of_words(bag_of_words_1: dict, bag_of_words_2: dict) -> int:
             similarity += bag_of_words_1[word1] * bag_of_words_2[word1]
     return similarity
 
+
 def find_best_sentence(question: str) -> str:
     """
     Finds the best sentence from the input bag of words
@@ -53,16 +57,19 @@ def find_best_sentence(question: str) -> str:
         similarity = compare_bag_of_words(input_bow, question_bag_of_words)
         if similarity > best_sentence_similarity:
             best_sentence_similarity = similarity
-            best_sentence = i
-    return df[INPUT_COL_NAME][i]
+            best_sentence_i = i
+    return df[INPUT_COL_NAME][best_sentence_i]
 
-def create_input_bag_of_words(df: pd.DataFrame) -> list:
+
+def create_input_bag_of_words() -> None:
     """
-    Creates a list of bag of words from a dataframe
-    :param df: The dataframe to create the bag of words from
+    Creates a list of bag of words from the input dataframe
     :return: A list of bag of words
     """
+    global df
+    global input_bag_of_words
+    df = pd.read_csv("/Users/fdurrani/LocalGithub/Foreign/wise/backend/data/meditations.csv")
     with Pool(cpu_count()) as p:
-        input_bag_of_words = p.map(create_bag_of_words, df[INPUT_COL_NAME])
-    return input_bag_of_words
+        inp_bag_of_words = p.map(create_bag_of_words, df[INPUT_COL_NAME])
+    input_bag_of_words = inp_bag_of_words
 
