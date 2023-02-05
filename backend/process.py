@@ -13,7 +13,7 @@ def create_bag_of_words(text: str) -> dict:
     :param text: The text to create the bag of words from
     :return: A dictionary with the words as keys and the number of occurrences as values
     """
-    with open("/Users/fdurrani/LocalGithub/Foreign/wise/backend/data/stopwords.json") as f:
+    with open(r"C:\Users\justp\Dropbox\My PC (DESKTOP-3HSSVJ3)\Desktop\GTs23\Misc\UGAHacks\wise\backend\data\stopwords.json") as f:
         stopWordsList = json.load(f)["stopwords"]
 
     stopWordsSet = set(stopWordsList)
@@ -69,7 +69,7 @@ def create_input_bag_of_words() -> None:
     """
     global df
     global input_bag_of_words
-    df = pd.read_csv("/Users/fdurrani/LocalGithub/Foreign/wise/backend/data/meditations.csv")
+    df = pd.read_csv(r"C:\Users\justp\Dropbox\My PC (DESKTOP-3HSSVJ3)\Desktop\GTs23\Misc\UGAHacks\wise\backend\data\meditations.csv")
     with Pool(cpu_count()) as p:
         inp_bag_of_words = p.map(create_bag_of_words, df[INPUT_COL_NAME])
     input_bag_of_words = inp_bag_of_words

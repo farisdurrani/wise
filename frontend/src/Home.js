@@ -94,7 +94,7 @@ const Home = () => {
         <textarea
           className="answerBox"
           type="textarea"
-          placeholder="And your scripture will tell you the answer..."
+          placeholder="And your text will show you the answer..."
           readOnly
           value={answer}
         />
