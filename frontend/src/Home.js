@@ -100,21 +100,6 @@ const Home = () => {
         />
       </div>
 
-      {/* user tells their problem based on their source of wisdom */}
-      <div className="userProblem">
-        <input
-          type="text"
-          onBlur={handleQuestion}
-          placeholder="Tell us your problem..."
-        />
-        <img
-          src={enterImage}
-          onClick={handleClick}
-          alt="Image"
-          className="enterButton"
-        />
-      </div>
-
       <img src={pageTurn} alt="" className="pageTurn" />
       <img src={vineImage} alt="" className="vineDecorator" />
     </div>
