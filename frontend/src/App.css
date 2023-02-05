@@ -56,7 +56,7 @@ body {
     height: 300px;
     width: 300px;
     cursor: pointer;
-    opacity: 0.85;
+    opacity: 0.5;
 }
 
 .carouselItem:hover{
@@ -103,17 +103,10 @@ body {
     justify-content: center;
     margin-top: 6rem;
 }
+
 .userSolution{
     display: flex;
     justify-content: center;
-}
-
-.chosenBook {
-    width: 20%;
-    font-size: 1.4rem;
-    font-weight: 500;
-    font-family: serif;
-    margin-left: 35%;
 }
 
 .answerBox {
@@ -234,9 +227,4 @@ body {
     .siteHeader{
         margin-inline: 40px;
     }
-}
-
-.meditations{
-    transform: scale(0.91);
-    margin-inline: 0px;
 }

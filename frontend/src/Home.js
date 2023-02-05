@@ -12,6 +12,14 @@ const Home = () => {
   const [question, setQuestion] = useState();
   const [answer, setAnswer] = useState("");
   const [book, setBook] = useState("Bible");
+  const [images, setImages] = useState([
+    {id: 1, src: holyBible, title: 'Bible',  opacity: 0.5},
+    {id: 2, src: meditations, title: 'Meditations', style: {transform: "scale(0.91)", marginRight: "35px"}, opacity: 0.5},
+    {id: 3, src: quran, title: 'Quran', opacity: 0.5}
+  ]
+  );
+
+  // const generalImageStyles = height
 
   function handleQuestion(e) {
     setQuestion(e.target.value);
@@ -35,6 +43,30 @@ const Home = () => {
     setBook(chosenBook);
   }
 
+  const handleClickReq = (id, title) => {
+    changeBook(title)
+    const updatedImages = images.map(image => {
+      if (image.id === id) {
+        return {
+          ...image,
+          opacity: image.opacity === 1 ? 0.5 : 1
+        };
+      }
+      else {
+        return {
+          ...image,
+          opacity: image.opacity = 0.5
+        }
+      }
+      return image;
+    });
+    setImages(updatedImages);
+  };
+  
+
+
+
+
   return (
     <div>
       {/* how do you change the <title> of the page?? */}
@@ -49,29 +81,15 @@ const Home = () => {
       <div className="selectionSection">
         <div className="carousel_parent">
           <div className="carousel">
-            <img
-              src={holyBible}
-              alt="Bible"
-              className="carouselItem"
-              onClick={() => changeBook("Bible")}
-            />
-            <img
-              src={meditations}
-              alt="Meditations boook"
-              className="carouselItem meditations"
-              onClick={() => changeBook("Meditations")}
-            />
-            <img
-              src={quran}
-              alt="Quran"
-              className="carouselItem"
-              onClick={() => changeBook("Quran")}
-            />
-            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
-            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
-            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
-            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
-            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
+              {images.map(image => (
+                <img
+                  key={image.id}
+                  src={image.src}
+                  style={{ opacity: image.opacity, ...image.style}}
+                  className="carouselItem"
+                  onClick={() => handleClickReq(image.id, image.title)}
+                />
+              ))}
           </div>
         </div>
 
@@ -81,10 +99,6 @@ const Home = () => {
           <br></br>
           Upload your own
         </button>
-      </div>
-
-      <div className="mt-2 chosenBook">
-        <p>Your chosen book: {book}</p>
       </div>
 
       {/* user tells their problem based on their source of wisdom */}
