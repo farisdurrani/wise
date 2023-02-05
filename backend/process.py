@@ -1,10 +1,19 @@
 import pandas as pd
 import json
 from multiprocessing import Pool, cpu_count
+import re
 
 INPUT_COL_NAME = "Text"
-df = None
-input_bag_of_words = None
+STOPWORDS_PATH = "../data/stopwords.json"
+books = {
+    "Bible": {"path": "../data/net_bible.csv"},
+    "Quran": {"path": "../data/Quran_English.csv"},
+    "Meditations": {"path": "../data/meditations.csv"}
+}
+
+
+def remove_symbols(string):
+    return re.sub(r'[^\w\s]', '', string)
 
 
 def create_bag_of_words(text: str) -> dict:
@@ -13,12 +22,12 @@ def create_bag_of_words(text: str) -> dict:
     :param text: The text to create the bag of words from
     :return: A dictionary with the words as keys and the number of occurrences as values
     """
-    with open(r"C:\Users\justp\Dropbox\My PC (DESKTOP-3HSSVJ3)\Desktop\GTs23\Misc\UGAHacks\wise\backend\data\stopwords.json") as f:
+    with open(STOPWORDS_PATH) as f:
         stopWordsList = json.load(f)["stopwords"]
 
     stopWordsSet = set(stopWordsList)
 
-    words = [word.lower() for word in text.translate({ord(c): None for c in ".?!\"':;%*@[]("}).split(" ") if
+    words = [remove_symbols(word).lower() for word in text.split(" ") if
              word not in stopWordsSet]
     bag_of_words = {}
     for word in words:
@@ -44,7 +53,7 @@ def compare_bag_of_words(bag_of_words_1: dict, bag_of_words_2: dict) -> int:
     return similarity
 
 
-def find_best_sentence(question: str) -> str:
+def find_best_sentence(question: str, book: str) -> str:
     """
     Finds the best sentence from the input bag of words
     :param question: The question to find the best sentence for
@@ -53,13 +62,15 @@ def find_best_sentence(question: str) -> str:
     question_bag_of_words = create_bag_of_words(question)
     best_sentence_i = -1
     best_sentence_similarity = 0
+    book_dict = books[book]
+    input_bag_of_words = book_dict["input_bag_of_words"]
     for i, input_bow in enumerate(input_bag_of_words):
         similarity = compare_bag_of_words(input_bow, question_bag_of_words)
         if similarity > best_sentence_similarity:
             best_sentence_similarity = similarity
             best_sentence_i = i
         print(f"Completed {i + 1} / {len(input_bag_of_words)}")
-    return df[INPUT_COL_NAME][best_sentence_i]
+    return book_dict['df'][INPUT_COL_NAME][best_sentence_i]
 
 
 def create_input_bag_of_words() -> None:
@@ -67,10 +78,10 @@ def create_input_bag_of_words() -> None:
     Creates a list of bag of words from the input dataframe
     :return: A list of bag of words
     """
-    global df
-    global input_bag_of_words
-    df = pd.read_csv(r"C:\Users\justp\Dropbox\My PC (DESKTOP-3HSSVJ3)\Desktop\GTs23\Misc\UGAHacks\wise\backend\data\meditations.csv")
-    with Pool(cpu_count()) as p:
-        inp_bag_of_words = p.map(create_bag_of_words, df[INPUT_COL_NAME])
-    input_bag_of_words = inp_bag_of_words
-
+    for book_name, book_dict in books.items():
+        book_dict["df"] = pd.read_csv(book_dict["path"])
+        # for row in book_dict["df"][INPUT_COL_NAME]:
+        #     c = create_bag_of_words(row)
+        with Pool(cpu_count()) as p:
+            inp_bag_of_words = p.map(create_bag_of_words, book_dict["df"][INPUT_COL_NAME])
+        book_dict["input_bag_of_words"] = inp_bag_of_words

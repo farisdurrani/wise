@@ -22,10 +22,11 @@ const Home = () => {
       .get("http://localhost:8000/api/question", {
         params: {
           question: question,
+          book: book,
         },
       })
       .then(async (response) => {
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise((r) => setTimeout(r, 1000));
         setAnswer(response.data.best_sentence);
       });
   }
@@ -58,8 +59,14 @@ const Home = () => {
               src={meditations}
               alt=""
               className="carouselItem meditations"
+              onClick={() => changeBook("Meditations")}
             />
-            <img src={quran} alt="" className="carouselItem" />
+            <img
+              src={quran}
+              alt=""
+              className="carouselItem"
+              onClick={() => changeBook("Quran")}
+            />
             <img src={enterImage} alt="" className="carouselItem" />
             <img src={enterImage} alt="" className="carouselItem" />
             <img src={enterImage} alt="" className="carouselItem" />
@@ -74,6 +81,10 @@ const Home = () => {
           <br></br>
           Upload your own
         </button>
+      </div>
+
+      <div className="mt-2 chosenBook">
+        <p>Your chosen book: {book}</p>
       </div>
 
       {/* user tells their problem based on their source of wisdom */}
