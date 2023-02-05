@@ -1,4 +1,5 @@
 {
     "ecl.launchConfiguration": "not found",
-    "ecl.targetCluster": {}
+    "ecl.targetCluster": {},
+    "python.formatting.provider": "black"
 }
