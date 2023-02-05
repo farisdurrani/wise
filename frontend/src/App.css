@@ -43,7 +43,7 @@ body {
 }
 
 .carousel_parent{
-    overflow-x: auto;
+    overflow-x: scroll;
     max-width: 600px;
 }
 
