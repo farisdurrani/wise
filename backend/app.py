@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 import os
 import json
@@ -17,6 +17,11 @@ else:
 def hello_world():
     return {"hello": "world"}
 
+
+@app.route("/api/question", methods=["POST", "GET"])
+def process_question():
+    question = request.args.getlist('question')
+    return {"question": 12}
 
 
 if __name__ == "__main__":
