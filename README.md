@@ -24,3 +24,6 @@ pip install -r requirements.txt
 python app.py
 ```
 Open the app at http://localhost:8000
+
+## If you are experiencing any issues feel free to reference these links:
+https://www.nltk.org/data.html
