@@ -4,6 +4,7 @@ from multiprocessing import Pool, cpu_count
 import re
 from nltk.corpus import wordnet
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from parserToCSV import concertTxtToCsv
 
 INPUT_COL_NAME = "Text"
 STOPWORDS_PATH = "../data/stopwords.json"
@@ -160,6 +161,11 @@ def upload_new_book(data: str, title: str):
     try:
         with open(path, "w", encoding='utf-8') as f:
             f.write(data)
+
+        if title[-3:] == 'txt':
+            concertTxtToCsv(path)
+            path = path[:-3] + "csv"
+
         print(f"Writing new book {title} done")
         process_new_book(path)
         print(f"Processed new book {title}\n")
