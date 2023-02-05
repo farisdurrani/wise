@@ -51,33 +51,33 @@ const Home = () => {
           <div className="carousel">
             <img
               src={holyBible}
-              alt=""
+              alt="Bible"
               className="carouselItem"
               onClick={() => changeBook("Bible")}
             />
             <img
               src={meditations}
-              alt=""
+              alt="Meditations boook"
               className="carouselItem meditations"
               onClick={() => changeBook("Meditations")}
             />
             <img
               src={quran}
-              alt=""
+              alt="Quran"
               className="carouselItem"
               onClick={() => changeBook("Quran")}
             />
-            <img src={enterImage} alt="" className="carouselItem" />
-            <img src={enterImage} alt="" className="carouselItem" />
-            <img src={enterImage} alt="" className="carouselItem" />
-            <img src={enterImage} alt="" className="carouselItem" />
-            <img src={enterImage} alt="" className="carouselItem" />
+            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
+            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
+            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
+            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
+            <img src={enterImage} alt="Placeholder for new book" className="carouselItem" />
           </div>
         </div>
 
         {/* option to upload a plain-text file*/}
         <button className="userReq">
-          <img src={bookImage} alt="" className="bookVector" />
+          <img src={bookImage} alt="Enter" className="bookVector" />
           <br></br>
           Upload your own
         </button>
