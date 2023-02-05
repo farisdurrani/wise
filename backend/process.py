@@ -72,8 +72,9 @@ def find_best_sentence(question: str, book: str) -> str:
         if similarity > best_sentence_similarity:
             best_sentence_similarity = similarity
             best_sentence_i = i
-        print(f"Completed {i + 1} / {len(input_bag_of_words)}")
-        print("best_sentence_i", best_sentence_i)
+        if i % 100 == 0:
+            print(f"Completed {i + 1} / {len(input_bag_of_words)}")
+    print("best_sentence_i", best_sentence_i)
     return book_dict['sentences'][best_sentence_i]
 
 
