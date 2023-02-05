@@ -137,6 +137,10 @@ body {
     transition-duration: 150ms;
 }
 
+.userReqFile{
+    display: none;
+}
+
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     font-style: italic;
   }

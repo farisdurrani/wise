@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import enterImage from "./img/enter_button.jpg";
 import pageTurn from "./img/page-turn.png";
 import axios from "axios";
@@ -13,12 +13,23 @@ const Home = () => {
   const [answer, setAnswer] = useState("");
   const [book, setBook] = useState("Bible");
   const [images, setImages] = useState([
-    {id: 1, src: holyBible, title: 'Bible',  opacity: 0.5},
-    {id: 2, src: meditations, title: 'Meditations', style: {transform: "scale(0.91)", marginRight: "35px"}, opacity: 0.5},
-    {id: 3, src: quran, title: 'Quran', opacity: 0.5}
-  ]
-  );
+    { id: 1, src: holyBible, title: "Bible", opacity: 0.5 },
+    {
+      id: 2,
+      src: meditations,
+      title: "Meditations",
+      style: { transform: "scale(0.91)", marginRight: "35px" },
+      opacity: 0.5,
+    },
+    { id: 3, src: quran, title: "Quran", opacity: 0.5 },
+  ]);
+  const [userFile, setFile] = useState(null)
+  const inputRef = useRef(null);
 
+  const handleNewFileClick = () => {
+    inputRef.current.click();
+    alert(userFile)
+  };
   // const generalImageStyles = height
 
   function handleQuestion(e) {
@@ -34,7 +45,7 @@ const Home = () => {
         },
       })
       .then(async (response) => {
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 0));
         setAnswer(response.data.best_sentence);
       });
   }
@@ -44,28 +55,23 @@ const Home = () => {
   }
 
   const handleClickReq = (id, title) => {
-    changeBook(title)
-    const updatedImages = images.map(image => {
+    changeBook(title);
+    const updatedImages = images.map((image) => {
       if (image.id === id) {
         return {
           ...image,
-          opacity: image.opacity === 1 ? 0.5 : 1
+          opacity: image.opacity === 1 ? 0.5 : 1,
         };
-      }
-      else {
+      } else {
         return {
           ...image,
-          opacity: image.opacity = 0.5
-        }
+          opacity: (image.opacity = 0.5),
+        };
       }
       return image;
     });
     setImages(updatedImages);
   };
-  
-
-
-
 
   return (
     <div>
@@ -81,21 +87,21 @@ const Home = () => {
       <div className="selectionSection">
         <div className="carousel_parent">
           <div className="carousel">
-              {images.map(image => (
-                <img
-                  key={image.id}
-                  src={image.src}
-                  style={{ opacity: image.opacity, ...image.style}}
-                  className="carouselItem"
-                  onClick={() => handleClickReq(image.id, image.title)}
-                />
-              ))}
+            {images.map((image) => (
+              <img
+                key={image.id}
+                src={image.src}
+                style={{ opacity: image.opacity, ...image.style }}
+                className="carouselItem"
+                onClick={() => handleClickReq(image.id, image.title)}
+              />
+            ))}
           </div>
         </div>
 
         {/* option to upload a plain-text file*/}
         <button className="userReq">
-          <img src={bookImage} alt="Enter" className="bookVector" />
+          <img src={bookImage} onClick={handleNewFileClick} alt="Enter" className="bookVector" />
           <br></br>
           Upload your own
         </button>
@@ -125,6 +131,10 @@ const Home = () => {
         />
       </div>
 
+      {/* file grabber */}
+      <input type="file" className="userReqFile" accept="csv" onChange={(e) => setFile(e.target.files[0])} ref={inputRef}/>
+
+      {/* decorators */}
       <img src={pageTurn} alt="" className="pageTurn" />
       <img src={vineImage} alt="" className="vineDecorator" />
     </div>
