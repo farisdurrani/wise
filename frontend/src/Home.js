@@ -11,6 +11,7 @@ import quran from "./img/quran.png";
 const Home = () => {
   const [question, setQuestion] = useState();
   const [answer, setAnswer] = useState("");
+  const [book, setBook] = useState("Bible");
 
   function handleQuestion(e) {
     setQuestion(e.target.value);
@@ -28,6 +29,10 @@ const Home = () => {
       });
   }
 
+  function changeBook(chosenBook) {
+    setBook(chosenBook);
+  }
+
   return (
     <div>
       {/* how do you change the <title> of the page?? */}
@@ -42,7 +47,12 @@ const Home = () => {
       <div className="selectionSection">
         <div className="carousel_parent">
           <div className="carousel">
-            <img src={holyBible} alt="" className="carouselItem" />
+            <img
+              src={holyBible}
+              alt=""
+              className="carouselItem"
+              onClick={() => changeBook("Bible")}
+            />
             <img
               src={meditations}
               alt=""
