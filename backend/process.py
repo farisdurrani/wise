@@ -2,6 +2,8 @@ import pandas as pd
 import json
 from multiprocessing import Pool, cpu_count
 import re
+from nltk.corpus import wordnet
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 INPUT_COL_NAME = "Text"
 STOPWORDS_PATH = "../data/stopwords.json"
@@ -60,17 +62,20 @@ def find_best_sentence(question: str, book: str) -> str:
     :return: The best sentence
     """
     question_bag_of_words = create_bag_of_words(question)
+    synonymized_bow = produce_synonym_dict([question_bag_of_words])[0]
     best_sentence_i = -1
     best_sentence_similarity = 0
     book_dict = books[book]
     input_bag_of_words = book_dict["input_bag_of_words"]
     for i, input_bow in enumerate(input_bag_of_words):
-        similarity = compare_bag_of_words(input_bow, question_bag_of_words)
+        similarity = compare_bag_of_words(input_bow, synonymized_bow)
         if similarity > best_sentence_similarity:
             best_sentence_similarity = similarity
             best_sentence_i = i
-        print(f"Completed {i + 1} / {len(input_bag_of_words)}")
-    return book_dict['df'][INPUT_COL_NAME][best_sentence_i]
+        if i % 100 == 0:
+            print(f"Completed {i + 1} / {len(input_bag_of_words)}")
+    print("best_sentence_i", best_sentence_i)
+    return book_dict['sentences'][best_sentence_i]
 
 
 def create_input_bag_of_words() -> None:
@@ -79,9 +84,59 @@ def create_input_bag_of_words() -> None:
     :return: A list of bag of words
     """
     for book_name, book_dict in books.items():
-        book_dict["df"] = pd.read_csv(book_dict["path"])
-        # for row in book_dict["df"][INPUT_COL_NAME]:
-        #     c = create_bag_of_words(row)
+        df = pd.read_csv(book_dict["path"])
+        book_dict["sentences"] = remove_negatives(df[INPUT_COL_NAME])
         with Pool(cpu_count()) as p:
-            inp_bag_of_words = p.map(create_bag_of_words, book_dict["df"][INPUT_COL_NAME])
-        book_dict["input_bag_of_words"] = inp_bag_of_words
+            inp_bag_of_words = p.map(create_bag_of_words, book_dict["sentences"])
+        book_dict["input_bag_of_words"] = produce_synonym_dict(inp_bag_of_words)
+
+
+def remove_negatives(sentences: list[str]) -> list[str]:
+    pos_sentences = []
+    analyzer = SentimentIntensityAnalyzer()
+    for sentence in sentences:
+        vs = analyzer.polarity_scores(sentence)
+        if (vs['compound']) < -.05:
+            continue
+        else:
+            pos_sentences.append(sentence)
+    return pos_sentences
+
+
+def find_root_synonym(word):
+    root_synonym = word
+    synsets = wordnet.synsets(word)
+    if synsets:
+        # Choose the first synset
+        synset = synsets[0]
+        # Get the root hypernym of the first synset
+        root_hypernym = synset.root_hypernyms()[0]
+        # Get the first lemma of the root hypernym
+        root_synonym = root_hypernym.lemmas()[0].name()
+    return root_synonym
+
+
+def produce_synonym_dict(input_dict: list[dict]) -> list[dict]:
+    root_list = []  # updated list with root synonyms
+
+    for in_dict in input_dict:
+        root_dict = {}  # creates a new root dictionary for each dictionary read
+        # print(root_dict)
+        seen = set()  # keeps track of which keys have been seen
+        # syn_seen = {}
+        for key, value in in_dict.items():
+            # print(key, value)
+            root_syn = find_root_synonym(key)
+            if root_syn == 'entity':
+                continue
+            # check if seen
+            if root_syn in seen:
+                # add value to value for relevant key in root dictionary
+                # continue without adding root to dict
+                old_val = root_dict[root_syn]
+                root_dict[root_syn] = old_val + value
+            else:
+                root_dict[root_syn] = value
+                seen.add(root_syn)
+        root_list.append(root_dict)
+    return root_list
