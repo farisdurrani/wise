@@ -1,8 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import os
-from process import find_best_sentence, df, create_input_bag_of_words
-import pandas as pd
+from process import find_best_sentence, create_input_bag_of_words
 
 app = Flask(__name__)
 CORS(app)
@@ -30,5 +29,3 @@ def process_question():
 if __name__ == "__main__":
     create_input_bag_of_words()
     app.run(debug=True, host="0.0.0.0", port=PORT)
-
-

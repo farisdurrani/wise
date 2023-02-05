@@ -11,17 +11,22 @@ import quran from "./img/quran.png"
 
 const Home = () => {
   const [question, setQuestion] = useState();
+  const [answer, setAnswer] = useState("");
 
   function handleQuestion(e) {
     setQuestion(e.target.value);
   }
 
   function handleClick() {
-    axios.get("http://localhost:8000/api/question", {
-      params: {
-        question: question,
-      }
-    })
+    axios
+      .get("http://localhost:8000/api/question", {
+        params: {
+          question: question,
+        },
+      })
+      .then((response) => {
+        setAnswer(response.data.best_sentence);
+      });
   }
 
   return (
@@ -58,7 +63,24 @@ const Home = () => {
       </button>
     </div>
 
-    {/* access to file */}
+      {/* user tells their problem based on their source of wisdom */}
+      <div className="userProblem">
+        <input
+          type="text"
+          placeholder="Tell us your problem..."
+          onBlur={handleQuestion}
+        />
+          <img onClick={handleClick} src={enterImage} alt="Image" className="enterButton" />
+      </div>
+      <div className="userSolution mt-2">
+        <textarea
+          className="answerBox"
+          type="textarea"
+          placeholder="And your scripture will tell you the answer..."
+          readOnly
+          value={answer}
+        />
+      </div>
 
 
     {/* user tells their problem based on their source of wisdom */}
