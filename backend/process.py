@@ -12,6 +12,7 @@ books = {
     "Quran": {"path": "../data/Quran_English.csv"},
     "Meditations": {"path": "../data/meditations.csv"}
 }
+NEW_UPLOAD_PATH = "../data"
 
 
 def remove_symbols(string):
@@ -78,6 +79,18 @@ def find_best_sentence(question: str, book: str) -> str:
     return book_dict['sentences'][best_sentence_i]
 
 
+def process_new_book(path: str) -> None:
+    book_name = path.split("/")[-1].split(".")[0]
+    books[book_name] = {"path": path}
+    book_dict = books[book_name]
+
+    df = pd.read_csv(book_dict["path"])
+    book_dict["sentences"] = remove_negatives(df[INPUT_COL_NAME])
+    with Pool(cpu_count()) as p:
+        inp_bag_of_words = p.map(create_bag_of_words, book_dict["sentences"])
+    book_dict["input_bag_of_words"] = produce_synonym_dict(inp_bag_of_words)
+
+
 def create_input_bag_of_words() -> None:
     """
     Creates a list of bag of words from the input dataframe
@@ -140,3 +153,16 @@ def produce_synonym_dict(input_dict: list[dict]) -> list[dict]:
                 seen.add(root_syn)
         root_list.append(root_dict)
     return root_list
+
+
+def upload_new_book(data: str, title: str):
+    path = f"{NEW_UPLOAD_PATH}/{title}"
+    try:
+        with open(path, "w", encoding='utf-8') as f:
+            f.write(data)
+        print(f"Writing new book {title} done")
+        process_new_book(path)
+        print(f"Processed new book {title}\n")
+        return {"upload_success": True}
+    except Exception:
+        return {"upload_success": False}
