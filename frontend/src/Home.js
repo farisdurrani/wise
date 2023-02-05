@@ -24,7 +24,8 @@ const Home = () => {
           question: question,
         },
       })
-      .then((response) => {
+      .then(async (response) => {
+        await new Promise(r => setTimeout(r, 2000));
         setAnswer(response.data.best_sentence);
       });
   }
