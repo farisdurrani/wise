@@ -5,17 +5,22 @@ import axios from "axios";
 
 const Home = () => {
   const [question, setQuestion] = useState();
+  const [answer, setAnswer] = useState("");
 
   function handleQuestion(e) {
     setQuestion(e.target.value);
   }
 
   function handleClick() {
-    axios.get("http://localhost:8000/api/question", {
-      params: {
-        question: question,
-      }
-    })
+    axios
+      .get("http://localhost:8000/api/question", {
+        params: {
+          question: question,
+        },
+      })
+      .then((response) => {
+        setAnswer(response.data.best_sentence);
+      });
   }
 
   return (
@@ -49,6 +54,15 @@ const Home = () => {
         <button onClick={handleClick}>
           <img src={enterImage} alt="Image" className="enterButton" />
         </button>
+      </div>
+      <div className="userSolution mt-2">
+        <textarea
+          className="answerBox"
+          type="textarea"
+          placeholder="And your scripture will tell you the answer..."
+          value={answer}
+          readOnly
+        />
       </div>
 
       <img src={pageTurn} alt="" className="pageTurn" />

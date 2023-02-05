@@ -58,6 +58,7 @@ def find_best_sentence(question: str) -> str:
         if similarity > best_sentence_similarity:
             best_sentence_similarity = similarity
             best_sentence_i = i
+        print(f"Completed {i + 1} / {len(input_bag_of_words)}")
     return df[INPUT_COL_NAME][best_sentence_i]
 
 

@@ -51,6 +51,23 @@ body {
     justify-content: center;
     margin-top: 12rem;
 }
+.userSolution{
+    display: flex;
+    justify-content: center;
+}
+
+.answerBox {
+    width: 60%;
+    height: 60vh;
+    background-color: lightgreen;
+    font-style: italic;
+    border-radius: 30px;
+
+    padding: 10px 30px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: serif;
+}
 
 .enterButton{
     height: 60px;
