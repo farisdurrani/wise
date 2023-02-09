@@ -1,5 +1,6 @@
 # wise
 Ask and we give you wise quotes from your own books.
+Developed for UGAHacks 8 (2023): [Devpost submission](https://devpost.com/software/wise-lvzmn9?ref_content=user-portfolio&ref_feature=in_progress)
 
 # Frontend
 ## Prerequisites
@@ -23,4 +24,10 @@ cd backend
 pip install -r requirements.txt
 python app.py
 ```
-Open the app at http://localhost:8000
+The backend is alive at http://localhost:8000
+If you are experiencing any issues with the `nltk` library, feel free to reference these links:
+https://www.nltk.org/data.html
+
+# Preview
+<img width="1512" alt="Screenshot 2023-02-08 at 19 49 45" src="https://user-images.githubusercontent.com/40067313/217686338-b0b1a1d5-1970-4690-abe5-99ceb5ceaaf0.png">
+
